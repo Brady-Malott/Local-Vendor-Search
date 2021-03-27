@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block content %}
+<div class="search-flex">
+  <form method="post">
+    <label for="search">Search</label>
+    <input
+      name="search"
+      type="text"
+      id="search"
+      value="{{ request.form['search']
+    }}"
+      required
+    />
+    <input type="submit" value="Search" />
+  </form>
+</div>
+{% endblock %}
