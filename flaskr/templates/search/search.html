@@ -4,22 +4,21 @@
     Welcome to Vendor Search! Enter a distance below to find vendors near you.
   </h1>
   <form method="post">
-    <input
-      name="distance"
-      type="text"
-      id="distance"
-      value="{{ request.form['distance']
-    }}"
-      placeholder="Distance"
-      required
-    />
+    <input name="distance" type="text" id="distance" value="{{ request.form['distance']
+    }}" placeholder="Distance" required />
     <input type="submit" value="Search" hidden />
   </form>
   <ul class="search-results">
     {% for vendor in vendors %}
-    <li>
-      <p>{{vendor.name}}</p>
-      <p>{{vendor.age}}</p>
+    <li class="search-result">
+      <div class="result-subsection left-subsection">
+        <p>{{vendor.name}}</p>
+        <p>{{vendor.address}}</p>
+      </div>
+      <div class="result-subsection right-subsection">
+        <p>{{'Open' if vendor.open else 'Closed'}}</p>
+        <p>{{vendor.rating}}</p>
+      </div>
     </li>
     {% endfor %} {% endblock %}
   </ul>
