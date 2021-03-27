@@ -8,6 +8,9 @@
     }}" placeholder="Distance" required />
     <input type="submit" value="Search" hidden />
   </form>
+  <li class="dropdown-filter">
+    
+  </li>
   <ul class="search-results">
     {% for vendor in vendors %}
     <li class="search-result">
@@ -20,6 +23,6 @@
         <p>{{vendor.rating}}</p>
       </div>
     </li>
-    {% endfor %} {% endblock %}
   </ul>
+  {% endfor %} {% endblock %}
 </div>
