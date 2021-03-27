@@ -3,7 +3,5 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <nav class="navbar"><p>Vendor Search</p></nav>
 <section class="content container-70">
-  {% with messages = get_flashed_messages() %} {% for message in messages %}
-  <p>{{ message }}</p>
-  {% endfor %} {% endwith %} {% block content %}{% endblock %}
+  {% block content %}{% endblock %}
 </section>
