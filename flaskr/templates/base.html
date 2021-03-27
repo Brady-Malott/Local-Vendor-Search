@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <title>Vendor Search</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<script
+  src="https://kit.fontawesome.com/51e5f7eb94.js"
+  crossorigin="anonymous"
+></script>
 <nav class="navbar"><p>Vendor Search</p></nav>
 <section class="content container-70">
-  {% with messages = get_flashed_messages() %} {% for message in messages %}
-  <p>{{ message }}</p>
-  {% endfor %} {% endwith %} {% block content %}{% endblock %}
+  {% block content %}{% endblock %}
 </section>
