@@ -3,8 +3,9 @@
   <h1>
     Welcome to Vendor Search! Enter a distance below to find vendors near you.
   </h1>
-  <form method="post">
-    <input
+  <form class="search-form" method="post">
+    <div class="search-bar">
+      <input
       name="distance"
       type="text"
       id="distance"
@@ -12,9 +13,35 @@
     }}"
       placeholder="Distance"
       required
-    />
-    <input type="submit" value="Search" hidden />
+      />
+      <input type="submit" value="Search" hidden />
+      <button id="filter-btn">Filter Search <i id="dropdown-icon" class="fas fa-caret-down"></i></button>
+    </div>
+    
+    <div id="dropdown-menu" style="display: none;">
+      <div class="type-filters">
+        <div>
+          <label for="delivery">Delivery</label>
+          <input class="dropdown-checkbox" name="delivery" type="checkbox" value="{{ request.form['delivery'] }}" checked>
+        </div>
+        <div>
+          <label for="take-out">Take out</label>
+          <input class="dropdown-checkbox" name="take-out" type="checkbox" value="{{ request.form['takeout'] }}" checked>
+        </div>
+      </div>
+      <div class="rank-filters">
+        <div>
+          <label for="prominence">Prominence</label>
+          <input class="dropdown-checkbox" name="prominence" type="checkbox">
+        </div>
+        <div>
+          <label for="distance">Distance</label>
+          <input class="dropdown-checkbox" name="distance" type="checkbox">
+        </div>
+      </div>
+    </div>
   </form>
+
   <ul class="search-results">
     {% for vendor in vendors %}
     <li class="search-result">
@@ -30,4 +57,21 @@
     {% endfor %}
   </ul>
 </div>
+<script type=text/javascript>
+  document.getElementById("filter-btn").addEventListener('click', function(e) {
+    e.preventDefault();
+    console.log("Test");
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const dropdownIcon = document.getElementById('dropdown-icon');
+    if (dropdownMenu.style.display === 'none') {
+      dropdownMenu.style.display = 'flex';
+      dropdownIcon.classList.remove('fa-caret-down');
+      dropdownIcon.classList.add('fa-times');
+    } else {
+      dropdownMenu.style.display = 'none';
+      dropdownIcon.classList.remove('fa-times');
+      dropdownIcon.classList.add('fa-caret-down');
+    }
+  });
+</script>
 {% endblock %}

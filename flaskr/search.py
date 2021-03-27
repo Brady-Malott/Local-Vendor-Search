@@ -14,22 +14,26 @@ def index():
 @bp.route('/search', methods=('GET', 'POST'))
 def search(vendors=None):
   if request.method == 'POST':
-    vendors = get_vendors(request.form['distance'])
+    vendors = get_vendors(request.form)
     return render_template('search/search.html', vendors=vendors)
 
   return render_template('search/search.html')
 
 @bp.route('/info', methods=('GET', 'POST'))
-def info(text):
+def info():
   if request.method == 'POST':
     return
 
   return render_template('search/info.html')
 
-def get_vendors(distance):
-  # Make request to external api
+def get_vendors(form):
 
-  jsonResponse = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=42.041725972123416,-82.73100565945686&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type=meal_takeaway').json()
+  # Get search distance and filters
+  distance = form['distance']
+  type_string = 'meal_delivery' if 'delivery' in form.keys() else 'meal_takeaway'
+
+  # Make request to external api
+  jsonResponse = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=42.041725972123416,-82.73100565945686&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
 
   results = jsonResponse['results']
 
