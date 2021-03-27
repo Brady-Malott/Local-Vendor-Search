@@ -43,16 +43,20 @@
   </form>
   <ul class="search-results">
     {% for vendor in vendors %}
-    <li class="search-result">
-      <div class="result-subsection left-subsection">
-        <p>{{vendor.name}}</p>
-        <p>{{vendor.address}}</p>
-      </div>
-      <div class="result-subsection right-subsection">
-        <p>{{'Open' if vendor.open else 'Closed'}}</p>
-        <p>{{vendor.rating}}</p>
-      </div>
-    </li>
+    <form class="search-result-form" action="{{ url_for('searchBP.info') }}" method="post">
+      <button class="search-result-btn" name="info-btn" type="submit" value="{{ vendor }}">
+        <li class="search-result">
+          <div class="result-subsection left-subsection">
+            <p>{{vendor.name}}</p>
+            <p>{{vendor.address}}</p>
+          </div>
+          <div class="result-subsection right-subsection">
+            <p>{{'Open' if vendor.open else 'Closed'}}</p>
+            <p>{{vendor.rating}}</p>
+          </div>
+        </li>
+      </button>
+    </form>
     {% endfor %}
   </ul>
 </div>

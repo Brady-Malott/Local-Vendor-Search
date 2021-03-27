@@ -1,4 +1,18 @@
 {% extends 'base.html' %} {% block content %}
-<h1>This is the info page for a vendor</h1>
-
+<div class="info-wrapper">
+  <div class="info-left">
+    <h2>Vendor Name</h2>
+    <img src="{{ vendor['photo_reference'] }}" alt="Vendor image" />
+  </div>
+  <div class="info-right">
+    <p>Address</p>
+    <a href="#">Website</a>
+    <p>Operating hours</p>
+    <div class="service-options">
+      <p><i></i> Delivery</p>
+      <p><i></i> Takeout</p>
+    </div>
+    <p>Rating</p>
+  </div>
+</div>
 {% endblock %}
