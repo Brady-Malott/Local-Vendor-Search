@@ -50,7 +50,7 @@ ul {
 /* Home page (search area) */
 
 .search-flex {
-  height: inherit;
+  min-height: inherit;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -77,10 +77,10 @@ ul {
 
 .search-result {
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
   background-color: white;
   border-radius: 10px;
-  border: 2px solid #333;  
+  border: 2px solid #333;
   padding: 20px;
   align-items: center;
   column-gap: 10px;
@@ -95,12 +95,12 @@ ul {
   row-gap: 10px;
   min-width: 100px;
 }
-.result-subsection:last-of-type{
+.result-subsection:last-of-type {
   align-items: flex-end;
 }
-.left-subsection{
+.left-subsection {
   text-align: left !important;
 }
-.right-subsection{
+.right-subsection {
   text-align: right !important;
 }
