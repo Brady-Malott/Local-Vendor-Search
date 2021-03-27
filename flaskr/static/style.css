@@ -6,6 +6,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  background-color: #f4f4f4;
 }
 
 ul {
@@ -72,4 +73,34 @@ ul {
   justify-content: center;
   align-items: center;
   row-gap: 10px;
+}
+
+.search-result {
+  display: flex;
+  justify-content:space-between;
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid #333;  
+  padding: 20px;
+  align-items: center;
+  column-gap: 10px;
+  width: 450px;
+}
+
+.result-subsection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  row-gap: 10px;
+  min-width: 100px;
+}
+.result-subsection:last-of-type{
+  align-items: flex-end;
+}
+.left-subsection{
+  text-align: left !important;
+}
+.right-subsection{
+  text-align: right !important;
 }

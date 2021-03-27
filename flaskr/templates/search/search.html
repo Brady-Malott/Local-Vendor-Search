@@ -17,9 +17,15 @@
   </form>
   <ul class="search-results">
     {% for vendor in vendors %}
-    <li>
-      <p>{{vendor.name}}</p>
-      <p>{{vendor.age}}</p>
+    <li class="search-result">
+      <div class="result-subsection left-subsection">
+        <p>{{vendor.name}}</p>
+        <p>{{vendor.address}}</p>
+      </div>
+      <div class="result-subsection right-subsection">
+        <p>{{'Open' if vendor.open else 'Closed'}}</p>
+        <p>{{vendor.rating}}</p>
+      </div>
     </li>
     {% endfor %}
   </ul>
