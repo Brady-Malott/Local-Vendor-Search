@@ -140,6 +140,17 @@ ul {
   min-width: 800px;
 }
 
+.search-result-form {
+  min-width: inherit;
+}
+
+.search-result-btn {
+  border: none;
+  background: none;
+  min-width: inherit;
+  cursor: pointer;
+}
+
 .search-result {
   display: flex;
   justify-content: space-between;
@@ -149,7 +160,11 @@ ul {
   padding: 20px;
   align-items: center;
   column-gap: 10px;
-  min-width: inherit;
+  transition: background-color 0.25s;
+}
+
+.search-result:hover {
+  background-color: #ddd;
 }
 
 .result-subsection {
@@ -171,4 +186,22 @@ ul {
 
 .right-subsection {
   text-align: right !important;
+}
+
+/* Info page */
+
+.info-wrapper {
+  margin-top: 50px;
+  display: flex;
+  column-gap: 50px;
+  background-color: white;
+  padding: 40px;
+}
+
+.info-left {
+  flex: 2;
+}
+
+.info-right {
+  flex: 1;
 }

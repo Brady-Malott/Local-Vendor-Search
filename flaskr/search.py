@@ -19,12 +19,17 @@ def search(vendors=None):
 
   return render_template('search/search.html')
 
-@bp.route('/info', methods=('GET', 'POST'))
+@bp.route('/info', methods=['POST'])
 def info():
-  if request.method == 'POST':
-    return
+  import json
 
-  return render_template('search/info.html')
+  vendor = eval(request.form['info-btn'])
+  
+  if vendor['photo_reference'] != None:
+    img_src = get_img_src(vendor['photo_reference'])
+    vendor['photo_reference'] = img_src
+
+  return render_template('search/info.html', vendor=vendor)
 
 def get_vendors(form):
 
@@ -44,22 +49,32 @@ def get_vendors(form):
 
     # opening_hours
     if 'opening_hours' in item:
-      isOpen = item['opening_hours']['open_now']
+      is_open = item['opening_hours']['open_now']
     else:
-      isOpen = False
+      is_open = False
 
     # rating
     if 'rating' in item:
       rating = str(item['rating'])
     else:
       rating = 'No rating'
+
+    # Photo reference
+    if 'photos' in item:
+      photo_reference = item['photos'][0]['photo_reference']
+    else:
+      photo_reference = None
     
     place = {
       'name': item['name'],
       'address': item['vicinity'],
       'rating': rating,
-      'open': isOpen
+      'open': is_open,
+      'photo_reference': photo_reference,
     }
     data.append(place)
 
   return data
+
+def get_img_src(photo_reference):
+  return requests.get(f'https://maps.googleapis.com/maps/api/place/photo?photoreference={photo_reference}&maxwidth=600&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k')
