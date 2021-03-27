@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container-70 {
+  width: 70%;
+  margin: auto;
+}
+
+.container-80 {
+  width: 80%;
+  margin: auto;
+}
+
+.container-90 {
+  width: 90%;
+  margin: auto;
+}
+
+/* Navbar */
+
+.navbar {
+  height: 100px;
+  background-color: #333;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+/* Content */
+
+.content {
+  height: calc(100vh - 100px);
+  background-color: blue;
+}
+
+/* Home page (search area) */
+
+.search-flex {
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
