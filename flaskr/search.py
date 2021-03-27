@@ -29,12 +29,16 @@ def get_vendors(distance):
   # Make request to external api
   data = [
     {
-      'name': 'Brady',
-      'age': 19,
+      'name': "Brady's hotdog stand",
+      'address': '123 Main Street, Windsor',
+      'rating': 4.3,
+      'open': True,
     },
     {
-      'name': 'Yusuf',
-      'age': 18,
+      'name': "Yusuf's rental burgers",
+      'address': '456 Main Street, Windsor',
+      'rating': 4.9,
+      'open': True,
     },
   ]
   return data
