@@ -47,7 +47,7 @@ body {
 .search-flex {
   height: inherit;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
 }

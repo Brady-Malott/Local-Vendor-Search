@@ -13,14 +13,14 @@ def index():
 @bp.route('/search', methods=('GET', 'POST'))
 def search():
   if request.method == 'POST':
-    flash(request.form['search'])
-    return redirect(url_for('search.info'))
+    #flash(request.form['distance'])
+    return redirect(url_for('search.info',text=request.form['distance']))
 
   return render_template('search/search.html')
 
 @bp.route('/info', methods=('GET', 'POST'))
-def info():
+def info(text):
   if request.method == 'POST':
     return
 
-  return render_template('search/info.html')
+  return render_template('search/info.html', text=text)
