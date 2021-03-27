@@ -64,12 +64,3 @@ def get_vendors(form):
 
   return data
 
-def filter():
-  filters = [
-    {'bakery': True},
-    {'bar' : True},
-    {'cafe': True},
-    {'meal_delivery': True},
-    {'meal_takeout': True},
-    {'restaurant': True},
-  ]

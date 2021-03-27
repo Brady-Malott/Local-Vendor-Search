@@ -66,20 +66,21 @@ ul {
 .search-bar {
   display: flex;
   font-size: 1.2rem;
-  margin-bottom: 20px;
 }
 
 #distance {
   text-align: center;
   padding: 8px 20px;
-  border-radius: 5px;
+  border-top-left-radius: 5px;
   border: 2px solid black;
   outline: none;
   flex: 3;
   font-size: inherit;
   border-right: none;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+}
+
+.distance-dropdown-open{
+  border-bottom-left-radius: 5px;
 }
 
 #filter-btn {
@@ -87,12 +88,14 @@ ul {
   border: 2px solid black;
   outline: none;
   background-color: white;
-  border-radius: 5px;
+  border-top-right-radius: 5px;
   flex: 1;
   font-size: inherit;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
   transition: background-color 0.25s;
+}
+
+.filter-dropdown-open{
+  border-bottom-right-radius: 5px;
 }
 
 #filter-btn:hover {
@@ -107,8 +110,15 @@ ul {
 #dropdown-menu {
   display: none;
   justify-content: space-evenly;
+  background-color: white;
+  border: 2px solid black;
+  border-top: none;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   column-gap: 10px;
   min-width: 800px;
+  padding: 20px 0;
 }
 
 .dropdown-checkbox {
@@ -119,7 +129,7 @@ ul {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-end;
   row-gap: 10px;
 }
 
@@ -173,35 +183,3 @@ ul {
 .right-subsection {
   text-align: right !important;
 }
-<<<<<<< HEAD
-
-/*filter bar*/
-.dropdown-filter{
-  height: 100px;
-  display:flex;
-  background-color: white;
-  border-radius: 10px;
-  border: 2px solid #333; 
-  padding: 20px;
-  flex-direction: column;
-  justify-content:flex-start;
-  align-items: center;
-  row-gap: 40px;
-}
-
-.checkbox{
-  height: 50px;
-  display: flex;
-  background-color: white;
-  border-radius: 10px;
-  border: 2px solid #333;
-  padding: 10px;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-/*<div class="checkbox">
-    <input type="checkbox" value="1" id="checkboxOneInput"/>
-    <label for="checkboxOneinput"></label>
-  </div>*/
-=======
->>>>>>> 2aa4dafc59a5305105f27a0412462a5ddb6cd3d1
