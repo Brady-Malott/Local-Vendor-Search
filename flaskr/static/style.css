@@ -8,6 +8,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+ul {
+  list-style: none;
+}
+
 .container-70 {
   width: 70%;
   margin: auto;
@@ -47,7 +51,25 @@ body {
 .search-flex {
   height: inherit;
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  row-gap: 40px;
+}
+
+#distance {
+  text-align: center;
+  padding: 8px 20px;
+  border-radius: 5px;
+  border: 2px solid black;
+  outline: none;
+  width: 200px;
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 10px;
 }

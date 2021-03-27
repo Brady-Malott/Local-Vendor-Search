@@ -11,10 +11,10 @@ def index():
   return redirect(url_for('search.search'))
 
 @bp.route('/search', methods=('GET', 'POST'))
-def search():
+def search(vendors=None):
   if request.method == 'POST':
-    #flash(request.form['distance'])
-    return redirect(url_for('search.info',text=request.form['distance']))
+    vendors = get_vendors(request.form['distance'])
+    return render_template('search/search.html', vendors=vendors)
 
   return render_template('search/search.html')
 
@@ -23,4 +23,18 @@ def info(text):
   if request.method == 'POST':
     return
 
-  return render_template('search/info.html', text=text)
+  return render_template('search/info.html')
+
+def get_vendors(distance):
+  # Make request to external api
+  data = [
+    {
+      'name': 'Brady',
+      'age': 19,
+    },
+    {
+      'name': 'Yusuf',
+      'age': 18,
+    },
+  ]
+  return data
