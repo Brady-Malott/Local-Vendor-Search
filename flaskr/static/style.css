@@ -131,6 +131,7 @@ ul {
   row-gap: 10px;
 }
 
+/*results*/
 .search-results {
   display: flex;
   flex-direction: column;
@@ -153,6 +154,7 @@ ul {
 
 .search-result {
   display: flex;
+  min-width: inherit;
   justify-content: space-between;
   background-color: white;
   border-radius: 10px;
