@@ -6,10 +6,12 @@ from flask import (
 )
 
 bp = Blueprint('searchBP', __name__)
+lat = None
+lng = None
 
 @bp.route('/')
 def index():
-  return redirect(url_for('searchBP.search'))
+  return redirect(url_for('searchBP.location'))
 
 @bp.route('/search', methods=('GET', 'POST'))
 def search(vendors=None):
@@ -19,18 +21,14 @@ def search(vendors=None):
 
   return render_template('search/search.html')
 
-#@bp.route('/location', methods=('GET', 'POST'))
-#def location();
- # if request.method == 'POST':
-   # location = get_location(request.form)
-    #return render_template('search/search.html', location=location)
+@bp.route('/location', methods=('GET', 'POST'))
+def location():
+  if request.method == 'POST':
+    location = get_location(request.form['location'])
+    return redirect(url_for('searchBP.search'))
   
- # return render_template('search/location.html')
+  return render_template('search/location.html')
     
-
-
-
-
 
 @bp.route('/info', methods=['POST'])
 def info():
@@ -54,11 +52,15 @@ def get_vendors(form):
   # Get search distance and filters
   distance = form['distance']
   type_string = 'meal_delivery' if 'delivery' in form.keys() else 'meal_takeaway'
+  
 
   # Make request to external api
-  jsonResponse = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=42.041725972123416,-82.73100565945686&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
+  print(lat)
+  print(lng)
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={lat},{lng}&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
+  
 
-  results = jsonResponse['results']
+  results = json_response['results']
 
   data = []
 
@@ -103,6 +105,21 @@ def get_vendors(form):
     data.append(place)
 
   return data
+
+def get_location(location):
+
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={location}&inputtype=textquery&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k').json()
+
+  place_id = json_response['candidates'][0]['place_id']
+  
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&place_id={place_id}&fields=geometry').json()
+
+  location = json_response['result']['geometry']['location']
+
+  lat = location['lat']
+  lng = location['lng']
+
+  return (lat,lng)
 
 def create_static_image(photo_reference):
   import os
