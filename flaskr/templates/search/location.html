@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% block content %}
+<div class="location-flex">
+    <h1>
+        Welcome to Vendor Search! Please enter your current location.
+    </h1>
+    <form class="location-form" method="post">
+        <input name="location" type="text" id="location" value="{{request.form['location']}}" placeholder="Location"
+            required />
+        <input type="submit" hidden />
+    </form>
+</div>
+{% endblock %}

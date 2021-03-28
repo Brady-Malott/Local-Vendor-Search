@@ -19,6 +19,19 @@ def search(vendors=None):
 
   return render_template('search/search.html')
 
+#@bp.route('/location', methods=('GET', 'POST'))
+#def location();
+ # if request.method == 'POST':
+   # location = get_location(request.form)
+    #return render_template('search/search.html', location=location)
+  
+ # return render_template('search/location.html')
+    
+
+
+
+
+
 @bp.route('/info', methods=['POST'])
 def info():
   import json
@@ -75,6 +88,8 @@ def get_vendors(form):
     data.append(place)
 
   return data
+
+#def get_location(form):
 
 def get_img_src(photo_reference):
   return requests.get(f'https://maps.googleapis.com/maps/api/place/photo?photoreference={photo_reference}&maxwidth=600&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k')

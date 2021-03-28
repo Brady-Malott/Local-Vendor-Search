@@ -47,6 +47,24 @@ ul {
   /* background-color: blue; */
 }
 
+.location-flex{
+  margin: 40px 0;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 40px;
+}
+
+.location-form{
+  min-width: 800px;
+}
+
+.location-bar{
+  display: flex;
+  font-size: 1.2rem;
+}
 /* Home page (search area) */
 
 .search-flex {
