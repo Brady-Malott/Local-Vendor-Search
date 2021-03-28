@@ -6,12 +6,10 @@ from flask import (
 )
 
 bp = Blueprint('searchBP', __name__)
-lat = None
-lng = None
 
 @bp.route('/')
 def index():
-  return redirect(url_for('searchBP.location'))
+  return redirect(url_for('searchBP.search'))
 
 @bp.route('/search', methods=('GET', 'POST'))
 def search(vendors=None):
@@ -21,13 +19,6 @@ def search(vendors=None):
 
   return render_template('search/search.html')
 
-@bp.route('/location', methods=('GET', 'POST'))
-def location():
-  if request.method == 'POST':
-    location = get_location(request.form['location'])
-    return redirect(url_for('searchBP.search'))
-  
-  return render_template('search/location.html')
     
 
 @bp.route('/info', methods=['POST'])
@@ -55,9 +46,8 @@ def get_vendors(form):
   
 
   # Make request to external api
-  print(lat)
-  print(lng)
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={lat},{lng}&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
+
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=42.30630830953501,-83.04614556116694&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
   
 
   results = json_response['results']
@@ -105,21 +95,6 @@ def get_vendors(form):
     data.append(place)
 
   return data
-
-def get_location(location):
-
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={location}&inputtype=textquery&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k').json()
-
-  place_id = json_response['candidates'][0]['place_id']
-  
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&place_id={place_id}&fields=geometry').json()
-
-  location = json_response['result']['geometry']['location']
-
-  lat = location['lat']
-  lng = location['lng']
-
-  return (lat,lng)
 
 def create_static_image(photo_reference):
   import os

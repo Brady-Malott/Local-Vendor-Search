@@ -280,3 +280,9 @@ ul {
 .info-right > *:first-child {
   padding-top: 0;
 }
+
+@media (max-width:1300px){
+  .info-img{
+    width:75%;
+  }
+}
