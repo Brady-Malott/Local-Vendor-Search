@@ -1,18 +1,24 @@
 {% extends 'base.html' %} {% block content %}
 <div class="info-wrapper">
   <div class="info-left">
-    <h2>Vendor Name</h2>
-    <img src="{{ vendor['photo_reference'] }}" alt="Vendor image" />
+    <h2 class="info-title">Vendor Name</h2>
+    <img
+      class="info-img"
+      src="../../static/{{vendor['photo_reference']}}.jpg"
+      alt="Vendor image"
+    />
   </div>
   <div class="info-right">
-    <p>Address</p>
-    <a href="#">Website</a>
-    <p>Operating hours</p>
+    <p class="info-address">Address</p>
+    <a class="info-website" href="#"><p>Website</p></a>
+    <p class="info-hours">Operating hours</p>
     <div class="service-options">
-      <p><i></i> Delivery</p>
-      <p><i></i> Takeout</p>
+      <p class="info-delivery">
+        <i class="{{vendor['delivery']}}"></i> Delivery
+      </p>
+      <p class="info-takeout"><i class="{{vendor['takeout']}}"></i> Takeout</p>
     </div>
-    <p>Rating</p>
+    <p class="info-rating">Rating</p>
   </div>
 </div>
 {% endblock %}

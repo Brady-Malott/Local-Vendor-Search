@@ -26,8 +26,13 @@ def info():
   vendor = eval(request.form['info-btn'])
   
   if vendor['photo_reference'] != None:
-    img_src = get_img_src(vendor['photo_reference'])
-    vendor['photo_reference'] = img_src
+    create_static_image(vendor['photo_reference'])
+  
+  delivery_class = 'fas fa-check' if vendor['delivery'] else 'fas fa-times'
+  takeout_class = 'fas fa-check' if vendor['takeout'] else 'fas fa-times'
+  
+  vendor['delivery'] = delivery_class
+  vendor['takeout'] = takeout_class
 
   return render_template('search/info.html', vendor=vendor)
 
@@ -64,6 +69,14 @@ def get_vendors(form):
       photo_reference = item['photos'][0]['photo_reference']
     else:
       photo_reference = None
+
+    # Add types if they exist
+    delivery = False
+    takeout = False
+    if 'types' in item:
+      types = item['types']
+      delivery = 'meal_delivery' in types
+      takeout = 'meal_takeaway' in types
     
     place = {
       'name': item['name'],
@@ -71,10 +84,27 @@ def get_vendors(form):
       'rating': rating,
       'open': is_open,
       'photo_reference': photo_reference,
+      'delivery': delivery,
+      'takeout': takeout,
     }
     data.append(place)
 
   return data
 
-def get_img_src(photo_reference):
-  return requests.get(f'https://maps.googleapis.com/maps/api/place/photo?photoreference={photo_reference}&maxwidth=600&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k')
+def create_static_image(photo_reference):
+  import os
+
+  static_directory = 'flaskr/static/'
+  for filename in os.listdir(static_directory):
+    if filename.endswith('.jpg'):
+      os.remove(static_directory + filename)
+
+  raw_image_data = requests.get(f'https://maps.googleapis.com/maps/api/place/photo?photoreference={photo_reference}&maxwidth=600&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k')
+
+  f = open(f'flaskr/static/{photo_reference}.jpg', 'wb')
+
+  for chunk in raw_image_data:
+    if chunk:
+      f.write(chunk)
+
+  f.close()
