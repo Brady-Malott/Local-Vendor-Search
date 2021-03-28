@@ -47,7 +47,7 @@ ul {
   /* background-color: blue; */
 }
 
-.location-flex{
+.location-flex {
   margin: 40px 0;
   min-height: inherit;
   display: flex;
@@ -57,11 +57,11 @@ ul {
   row-gap: 40px;
 }
 
-.location-form{
+.location-form {
   min-width: 800px;
 }
 
-.location-bar{
+.location-bar {
   display: flex;
   font-size: 1.2rem;
 }
@@ -97,7 +97,7 @@ ul {
   border-right: none;
 }
 
-.distance-dropdown-open{
+.distance-dropdown-open {
   border-bottom-left-radius: 5px;
 }
 
@@ -112,7 +112,7 @@ ul {
   transition: background-color 0.25s;
 }
 
-.filter-dropdown-open{
+.filter-dropdown-open {
   border-bottom-right-radius: 5px;
 }
 
