@@ -1,7 +1,7 @@
 import requests
 
 from flask import (
-    Blueprint, flash, g, session, redirect, render_template, request, url_for
+    Blueprint, flash, session, redirect, render_template, request, url_for, current_app
 )
 
 bp = Blueprint('searchBP', __name__)
@@ -51,15 +51,11 @@ def get_vendors(form):
   type_string = 'meal_delivery' if form['filter'] == 'delivery' else 'meal_takeaway'
 
   # Make request to external api
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}&radius={distance}').json()
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&key={current_app.config["API_KEY"]}&type={type_string}&radius={distance}').json()
   results = json_response['results']
 
   data = []
   for item in results:
-    # Check if the name is a restaurant chain
-    # if check_chain(item):
-    #   continue
-
     # Check if certain keys exist in the results
 
     # opening_hours
@@ -107,15 +103,11 @@ def get_vendors(form):
 def get_nearby_vendors():
 
   # Make request to external api
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&&type=meal_takeaway&rankby=distance').json()
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&key={current_app.config["API_KEY"]}&type=meal_takeaway&rankby=distance').json()
   results = json_response['results']
 
   data = []
   for item in results:
-    # Check if the name is a restaurant chain
-    # if check_chain(item):
-    #   continue
-
     # Check if certain keys exist in the results
 
     # opening_hours
@@ -162,11 +154,11 @@ def get_nearby_vendors():
 
 def get_location(location):
 
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={location}&inputtype=textquery&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k').json()
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={location}&inputtype=textquery&key={current_app.config["API_KEY"]}').json()
 
   place_id = json_response['candidates'][0]['place_id']
   
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&place_id={place_id}&fields=geometry').json()
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key={current_app.config["API_KEY"]}&place_id={place_id}&fields=geometry').json()
 
   location = json_response['result']['geometry']['location']
 
@@ -181,7 +173,7 @@ def create_static_image(photo_reference):
     if filename.endswith('.jpg'):
       os.remove(static_directory + filename)
 
-  raw_image_data = requests.get(f'https://maps.googleapis.com/maps/api/place/photo?photoreference={photo_reference}&maxwidth=600&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k')
+  raw_image_data = requests.get(f'https://maps.googleapis.com/maps/api/place/photo?photoreference={photo_reference}&maxwidth=600&key={current_app.config["API_KEY"]}')
 
   f = open(f'flaskr/static/{photo_reference}.jpg', 'wb')
 
@@ -198,7 +190,7 @@ def get_vendor_details(vendor):
   vendor['delivery'] = delivery_class
   vendor['takeout'] = takeout_class
 
-  details_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&place_id={vendor["place_id"]}&fields=opening_hours,website,formatted_phone_number').json()['result']
+  details_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key={current_app.config["API_KEY"]}&place_id={vendor["place_id"]}&fields=opening_hours,website,formatted_phone_number').json()['result']
 
   if 'opening_hours' in details_response:
     weekday_text = details_response['opening_hours']['weekday_text']
