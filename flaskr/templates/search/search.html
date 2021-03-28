@@ -1,57 +1,49 @@
 {% extends 'base.html' %} {% block content %}
 <div class="search-flex">
-  <h1>
-    Now, how far would you like to search for vendors?
-  </h1>
+  <h1>Now, how far would you like to search for vendors?</h1>
   <form class="search-form" method="post">
     <div class="search-bar">
       <input
-      name="distance"
-      type="number"
-      min="0";
-      id="distance"
-      value="{{ request.form['distance']
+        name="distance"
+        type="number"
+        min="0"
+        id="distance"
+        value="{{ request.form['distance']
     }}"
-      placeholder="Distance (km)"
-      required
+        placeholder="Distance (km)"
+        required
       />
       <input type="submit" hidden />
-      <button id="filter-btn">Filter Search <i id="dropdown-icon" class="fas fa-caret-down"></i></button>
-    </div>
-    <div id="dropdown-menu" style="display: none;">
-      <div class="type-filters">
-        <div>
-          <label for="delivery">Delivery</label>
-          <input class="dropdown-checkbox" name="delivery" type="checkbox" value="{{ request.form['delivery'] }}" checked>
-        </div>
-        <div>
-          <label for="take-out">Take out</label>
-          <input class="dropdown-checkbox" name="take-out" type="checkbox" value="{{ request.form['takeout'] }}" checked>
-        </div>
-      </div>
-      <div class="rank-filters">
-        <div>
-          <label for="prominence">Prominence</label>
-          <input class="dropdown-checkbox" name="prominence" type="checkbox">
-        </div>
-        <div>
-          <label for="distance">Distance</label>
-          <input class="dropdown-checkbox" name="distance" type="checkbox">
-        </div>
-      </div>
+      <select
+        name="filter"
+        id="filter-select"
+        value="{{ request.form['filter'] }}"
+      >
+        <option value="delivery">Delivery</option>
+        <option value="takeout">Takeout</option>
+      </select>
     </div>
   </form>
   <ul class="search-results">
     {% for vendor in vendors %}
-    <form class="search-result-form" action="{{ url_for('searchBP.info') }}" method="post">
-      <button class="search-result-btn" name="info-btn" type="submit" value="{{ vendor }}">
+    <form
+      class="search-result-form"
+      action="{{ url_for('searchBP.info') }}"
+      method="post"
+    >
+      <button
+        class="search-result-btn"
+        name="info-btn"
+        type="submit"
+        value="{{ vendor }}"
+      >
         <li class="search-result">
           <div class="result-subsection left-subsection">
             <p>{{vendor.name}}</p>
             <p>{{vendor.address}}</p>
           </div>
           <div class="result-subsection right-subsection">
-            <p>{{'Open' if vendor.open else 'Closed'}}</p>
+            <p>{{vendor.open}}</p>
             <p>{{vendor.rating}}</p>
           </div>
         </li>
@@ -62,35 +54,12 @@
 </div>
 <style>
   input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button{
+  input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  input[type=number]{
+  input[type='number'] {
     -moz-appearance: textfield;
   }
 </style>
-<script type=text/javascript>
-  document.getElementById("filter-btn").addEventListener('click', function(e) {
-    e.preventDefault();
-    console.log("Test");
-    const dropdownMenu = document.getElementById('dropdown-menu');
-    const dropdownIcon = document.getElementById('dropdown-icon');
-    const distanceBar = document.getElementById('distance');
-    const filterBtn = document.getElementById('filter-btn');
-    if (dropdownMenu.style.display === 'none') {
-      distanceBar.classList.add('distance-dropdown-open');
-      filterBtn.classList.add('filter-dropdown-open');
-      dropdownMenu.style.display = 'flex';
-      dropdownIcon.classList.remove('fa-caret-down');
-      dropdownIcon.classList.add('fa-times');
-    } else {
-      distanceBar.classList.remove('distance-dropdown-open');
-      filterBtn.classList.remove('filter-dropdown-open');
-      dropdownMenu.style.display = 'none';
-      dropdownIcon.classList.remove('fa-times');
-      dropdownIcon.classList.add('fa-caret-down');
-    }
-  });
-</script>
 {% endblock %}

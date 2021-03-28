@@ -36,12 +36,8 @@ def info():
   
   if vendor['photo_reference'] != None:
     create_static_image(vendor['photo_reference'])
-  
-  delivery_class = 'fas fa-check' if vendor['delivery'] else 'fas fa-times'
-  takeout_class = 'fas fa-check' if vendor['takeout'] else 'fas fa-times'
-  
-  vendor['delivery'] = delivery_class
-  vendor['takeout'] = takeout_class
+
+  get_vendor_details(vendor)
 
   return render_template('search/info.html', vendor=vendor)
 
@@ -49,7 +45,7 @@ def get_vendors(form):
 
   # Get search distance and filters
   distance = form['distance']
-  type_string = 'meal_delivery' if 'delivery' in form.keys() else 'meal_takeaway'
+  type_string = 'meal_delivery' if form['filter'] == 'delivery' else 'meal_takeaway'
 
   # Make request to external api
   json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
@@ -64,6 +60,8 @@ def get_vendors(form):
       is_open = item['opening_hours']['open_now']
     else:
       is_open = False
+
+    is_open = 'Open' if is_open else 'Closed'
 
     # rating
     if 'rating' in item:
@@ -93,6 +91,7 @@ def get_vendors(form):
       'photo_reference': photo_reference,
       'delivery': delivery,
       'takeout': takeout,
+      'place_id': item['place_id']
     }
     data.append(place)
 
@@ -128,3 +127,52 @@ def create_static_image(photo_reference):
       f.write(chunk)
 
   f.close()
+
+def get_vendor_details(vendor):
+  delivery_class = 'fas fa-check' if vendor['delivery'] else 'fas fa-times'
+  takeout_class = 'fas fa-check' if vendor['takeout'] else 'fas fa-times'
+  
+  vendor['delivery'] = delivery_class
+  vendor['takeout'] = takeout_class
+
+  details_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&place_id={vendor["place_id"]}&fields=opening_hours,website,formatted_phone_number,price_level').json()['result']
+
+  if 'opening_hours' in details_response:
+    weekday_text = details_response['opening_hours']['weekday_text']
+    vendor['opening_hours'] = get_opening_hours(weekday_text)
+  else:
+    vendor['opening_hours'] = ['Operating hours unavailable']
+  
+  if 'website' in details_response:
+    vendor['website'] = details_response['website']
+  else:
+    vendor['website'] = 'Website not found'
+
+  if 'formatted_phone_number' in details_response:
+    vendor['phone_number'] = details_response['formatted_phone_number']
+  else:
+    vendor['phone_number'] = 'Phone number unavailable'
+
+def get_opening_hours(weekday_text):
+
+  opening_hours = []
+
+  weekday_text.append(": 11-11")
+  consecutive_days_Bool= False 
+  consecutive_days_str = ""
+  for i in range(len(weekday_text)-1):
+    currentDay = weekday_text[i].split(": ") 
+    nextDay = weekday_text[i+1].split(": ")
+    if currentDay[1]==nextDay[1]:
+      if not consecutive_days_Bool:
+        consecutive_days_Bool = True
+        consecutive_days_str = currentDay[0]
+    else:
+      if consecutive_days_Bool:
+        consecutive_days_Bool = False          
+        consecutive_days_str = consecutive_days_str + "-" + currentDay[0] + " " + currentDay[1]
+        opening_hours.append(consecutive_days_str)
+        consecutive_days_str = ""
+      else:
+        opening_hours.append(currentDay[0] + " " + currentDay[1])
+  return opening_hours
