@@ -1,7 +1,11 @@
 {% extends 'base.html' %} {% block content %}
 <div class="search-flex">
   <h1>Now, how far would you like to search for vendors?</h1>
-  <form class="search-form" method="post">
+  <form
+    class="search-form"
+    action="{{ url_for('searchBP.search') }}"
+    method="post"
+  >
     <div class="search-bar">
       <input
         name="distance"
@@ -11,7 +15,6 @@
         value="{{ request.form['distance']
     }}"
         placeholder="Distance (km)"
-        required
       />
       <input type="submit" hidden />
       <select
@@ -23,6 +26,19 @@
         <option value="takeout">Takeout</option>
       </select>
     </div>
+  </form>
+  <h1>Or, would you like to find up to 20 nearby vendors?</h1>
+  <form
+    class="second-search-form"
+    action="{{ url_for('searchBP.search_nearby') }}"
+    method="post"
+  >
+    <input
+      class="nearby-btn"
+      name="nearby"
+      type="submit"
+      value="Find nearby vendors"
+    />
   </form>
   <ul class="search-results">
     {% for vendor in vendors %}

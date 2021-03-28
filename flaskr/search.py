@@ -1,8 +1,7 @@
-import functools
 import requests
 
 from flask import (
-    Blueprint, flash, session, redirect, render_template, request, url_for
+    Blueprint, flash, g, session, redirect, render_template, request, url_for
 )
 
 bp = Blueprint('searchBP', __name__)
@@ -11,14 +10,6 @@ bp = Blueprint('searchBP', __name__)
 def index():
   return redirect(url_for('searchBP.location'))
 
-@bp.route('/search', methods=('GET', 'POST'))
-def search(vendors=None):
-  if request.method == 'POST':
-    vendors = get_vendors(request.form)
-    return render_template('search/search.html', vendors=vendors)
-
-  return render_template('search/search.html')
-
 @bp.route('/location', methods=('GET', 'POST'))
 def location():
   if request.method == 'POST':
@@ -26,7 +17,19 @@ def location():
     return redirect(url_for('searchBP.search'))
   
   return render_template('search/location.html')
+
+@bp.route('/search', methods=('GET', 'POST'))
+def search(vendors=None):
+  if request.method == 'POST':
+    vendors = get_vendors(request.form)
+    return render_template('search/search.html', vendors=vendors)
+
+  return render_template('search/search.html')
     
+@bp.route('/search-nearby', methods=['POST'])
+def search_nearby():
+  vendors = get_nearby_vendors()
+  return render_template('search/search.html', vendors=vendors)
 
 @bp.route('/info', methods=['POST'])
 def info():
@@ -48,11 +51,71 @@ def get_vendors(form):
   type_string = 'meal_delivery' if form['filter'] == 'delivery' else 'meal_takeaway'
 
   # Make request to external api
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}&radius={distance}').json()
   results = json_response['results']
 
   data = []
   for item in results:
+    # Check if the name is a restaurant chain
+    # if check_chain(item):
+    #   continue
+
+    # Check if certain keys exist in the results
+
+    # opening_hours
+    if 'opening_hours' in item:
+      is_open = item['opening_hours']['open_now']
+    else:
+      is_open = False
+
+    is_open = 'Open' if is_open else 'Closed'
+
+    # rating
+    if 'rating' in item:
+      rating = str(item['rating'])
+    else:
+      rating = 'No rating'
+
+    # Photo reference
+    if 'photos' in item:
+      photo_reference = item['photos'][0]['photo_reference']
+    else:
+      photo_reference = None
+
+    # Add types if they exist
+    delivery = False
+    takeout = False
+    if 'types' in item:
+      types = item['types']
+      delivery = 'meal_delivery' in types
+      takeout = 'meal_takeaway' in types
+    
+    place = {
+      'name': item['name'],
+      'address': item['vicinity'],
+      'rating': rating,
+      'open': is_open,
+      'photo_reference': photo_reference,
+      'delivery': delivery,
+      'takeout': takeout,
+      'place_id': item['place_id']
+    }
+    data.append(place)
+
+  return data
+
+def get_nearby_vendors():
+
+  # Make request to external api
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&&type=meal_takeaway&rankby=distance').json()
+  results = json_response['results']
+
+  data = []
+  for item in results:
+    # Check if the name is a restaurant chain
+    # if check_chain(item):
+    #   continue
+
     # Check if certain keys exist in the results
 
     # opening_hours
@@ -135,7 +198,7 @@ def get_vendor_details(vendor):
   vendor['delivery'] = delivery_class
   vendor['takeout'] = takeout_class
 
-  details_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&place_id={vendor["place_id"]}&fields=opening_hours,website,formatted_phone_number,price_level').json()['result']
+  details_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&place_id={vendor["place_id"]}&fields=opening_hours,website,formatted_phone_number').json()['result']
 
   if 'opening_hours' in details_response:
     weekday_text = details_response['opening_hours']['weekday_text']
@@ -146,7 +209,7 @@ def get_vendor_details(vendor):
   if 'website' in details_response:
     vendor['website'] = details_response['website']
   else:
-    vendor['website'] = 'Website not found'
+    vendor['website'] = '#'
 
   if 'formatted_phone_number' in details_response:
     vendor['phone_number'] = details_response['formatted_phone_number']
