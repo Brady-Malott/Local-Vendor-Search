@@ -1,8 +1,10 @@
 import requests
 
 from flask import (
-    Blueprint, flash, session, redirect, render_template, request, url_for, current_app
+    Blueprint, flash, session, redirect, render_template, request, url_for
 )
+
+from config import Config
 
 bp = Blueprint('searchBP', __name__)
 
@@ -49,7 +51,7 @@ def get_vendors(form):
   # Get search distance and filters
   distance = form['distance']
   type_string = 'meal_delivery' if form['filter'] == 'delivery' else 'meal_takeaway'
-  key = current_app.config["API_KEY"]
+  key = Config.API_KEY
 
   # Make request to external api
   json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&key={key}&type={type_string}&radius={distance}').json()
@@ -104,7 +106,7 @@ def get_vendors(form):
 def get_nearby_vendors():
 
   # Make request to external api
-  key = current_app.config["API_KEY"]
+  key = Config.API_KEY
   json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&key={key}&type=meal_takeaway&rankby=distance').json()
   results = json_response['results']
 
@@ -156,7 +158,7 @@ def get_nearby_vendors():
 
 def get_location(location):
 
-  key = current_app.config["API_KEY"]
+  key = Config.API_KEY
   json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={location}&inputtype=textquery&key={key}').json()
 
   place_id = json_response['candidates'][0]['place_id']
@@ -176,7 +178,7 @@ def create_static_image(photo_reference):
     if filename.endswith('.jpg'):
       os.remove(static_directory + filename)
 
-  key = current_app.config["API_KEY"]
+  key = Config.API_KEY
   raw_image_data = requests.get(f'https://maps.googleapis.com/maps/api/place/photo?photoreference={photo_reference}&maxwidth=600&key={key}')
 
   f = open(f'flaskr/static/{photo_reference}.jpg', 'wb')
@@ -194,7 +196,7 @@ def get_vendor_details(vendor):
   vendor['delivery'] = delivery_class
   vendor['takeout'] = takeout_class
 
-  key = current_app.config["API_KEY"]
+  key = Config.API_KEY
   details_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key={key}&place_id={vendor["place_id"]}&fields=opening_hours,website,formatted_phone_number').json()['result']
 
   if 'opening_hours' in details_response:
