@@ -2,7 +2,7 @@ import functools
 import requests
 
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for
+    Blueprint, flash, session, redirect, render_template, request, url_for
 )
 
 bp = Blueprint('searchBP', __name__)
@@ -43,12 +43,9 @@ def get_vendors(form):
   # Get search distance and filters
   distance = form['distance']
   type_string = 'meal_delivery' if 'delivery' in form.keys() else 'meal_takeaway'
-  
 
   # Make request to external api
-
-  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=42.30630830953501,-83.04614556116694&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
-  
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
 
   results = json_response['results']
 
@@ -95,6 +92,19 @@ def get_vendors(form):
     data.append(place)
 
   return data
+
+def get_location(location):
+
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={location}&inputtype=textquery&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k').json()
+
+  place_id = json_response['candidates'][0]['place_id']
+  
+  json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&place_id={place_id}&fields=geometry').json()
+
+  location = json_response['result']['geometry']['location']
+
+  session['lat'] = location['lat']
+  session['lng'] = location['lng']
 
 def create_static_image(photo_reference):
   import os

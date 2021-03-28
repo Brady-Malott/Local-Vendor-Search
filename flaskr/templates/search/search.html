@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 <div class="search-flex">
   <h1>
-    Welcome to Vendor Search! Enter a distance below to find vendors near you.
+    Now, how far would you like to search for vendors?
   </h1>
   <form class="search-form" method="post">
     <div class="search-bar">
@@ -12,7 +12,7 @@
       id="distance"
       value="{{ request.form['distance']
     }}"
-      placeholder="Distance"
+      placeholder="Distance (km)"
       required
       />
       <input type="submit" hidden />
