@@ -9,7 +9,7 @@ bp = Blueprint('searchBP', __name__)
 
 @bp.route('/')
 def index():
-  return redirect(url_for('searchBP.search'))
+  return redirect(url_for('searchBP.location'))
 
 @bp.route('/search', methods=('GET', 'POST'))
 def search(vendors=None):
@@ -19,6 +19,13 @@ def search(vendors=None):
 
   return render_template('search/search.html')
 
+@bp.route('/location', methods=('GET', 'POST'))
+def location():
+  if request.method == 'POST':
+    location = get_location(request.form['location'])
+    return redirect(url_for('searchBP.search'))
+  
+  return render_template('search/location.html')
     
 
 @bp.route('/info', methods=['POST'])

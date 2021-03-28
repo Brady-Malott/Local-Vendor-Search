@@ -43,12 +43,11 @@ ul {
 /* Content */
 
 .content {
-  height: calc(100vh - 100px);
+  min-height: calc(100vh - 100px);
   /* background-color: blue; */
 }
 
 .location-flex {
-  margin: 40px 0;
   min-height: inherit;
   display: flex;
   flex-direction: column;
@@ -65,10 +64,19 @@ ul {
   display: flex;
   font-size: 1.2rem;
 }
+
+#location{
+  text-align: center;
+  padding: 8px 300px;
+  border-radius: 5px;
+  border: 2px solid black;
+  outline: none;
+  flex: 3;
+  font-size: inherit;
+}
 /* Home page (search area) */
 
 .search-flex {
-  margin: 40px 0;
   min-height: inherit;
   display: flex;
   flex-direction: column;
@@ -95,6 +103,7 @@ ul {
   flex: 3;
   font-size: inherit;
   border-right: none;
+  border-bottom-left-radius: 5px;
 }
 
 .distance-dropdown-open {
