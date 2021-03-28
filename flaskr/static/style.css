@@ -98,6 +98,7 @@ ul {
   text-align: center;
   padding: 8px 20px;
   border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
   border: 2px solid black;
   outline: none;
   flex: 3;
@@ -107,7 +108,7 @@ ul {
 }
 
 .distance-dropdown-open {
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 0 !important;
 }
 
 #filter-btn {
@@ -116,13 +117,14 @@ ul {
   outline: none;
   background-color: white;
   border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
   flex: 1;
   font-size: inherit;
   transition: background-color 0.25s;
 }
 
 .filter-dropdown-open {
-  border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 0 !important;
 }
 
 #filter-btn:hover {

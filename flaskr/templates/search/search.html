@@ -79,14 +79,14 @@
     const distanceBar = document.getElementById('distance');
     const filterBtn = document.getElementById('filter-btn');
     if (dropdownMenu.style.display === 'none') {
-      distanceBar.classList.remove('distance-dropdown-open');
-      filterBtn.classList.remove('filter-dropdown-open');
+      distanceBar.classList.add('distance-dropdown-open');
+      filterBtn.classList.add('filter-dropdown-open');
       dropdownMenu.style.display = 'flex';
       dropdownIcon.classList.remove('fa-caret-down');
       dropdownIcon.classList.add('fa-times');
     } else {
-      distanceBar.classList.add('distance-dropdown-open');
-      filterBtn.classList.add('filter-dropdown-open');
+      distanceBar.classList.remove('distance-dropdown-open');
+      filterBtn.classList.remove('filter-dropdown-open');
       dropdownMenu.style.display = 'none';
       dropdownIcon.classList.remove('fa-times');
       dropdownIcon.classList.add('fa-caret-down');

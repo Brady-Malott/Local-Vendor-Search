@@ -53,11 +53,9 @@ def get_vendors(form):
 
   # Make request to external api
   json_response = requests.get(f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={session["lat"]},{session["lng"]}&radius={distance}&key=AIzaSyAY0zWfgbZso6jkaj-ZLof79cj_NAyCk9k&type={type_string}').json()
-
   results = json_response['results']
 
   data = []
-
   for item in results:
     # Check if certain keys exist in the results
 
